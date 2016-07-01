@@ -4,9 +4,11 @@
   "scripts": {
     "bundle:dev": "webpack --config webpack.dev.config.js",
     "bundle:dist": "webpack --config webpack.dist.config.js",
-    "build:dev": "node build/build.js --dev -p dist/*.js -i src/layout/main.tpl -o pages",
-    "build:dist": "node build/build.js -p dist/*.js -i src/layout/main.tpl -o pages",
-    "watch": "webpack --watch --config webpack.dev.config.js & gazeer -p dist/*.js -c 'node build/build.js --dev -p \"$filepath\" -i src/layout/main.tpl -o pages'"
+    "build:base": "node build/build.js -i src/layout/main.tpl -o pages",
+    "build:dev": "npm run build:base -- --dev -p dist/*.js",
+    "build:dist": "npm run build:base -- -p dist/*.js",
+    "dev": "npm run bundle:dev -- --watch & gazeer -p dist/*.js -c 'npm run build:base -- --dev -p \"$filepath\"'",
+    "dist": "npm run bundle:dist && npm run build:dist"
   },
   "author": "Terry King <terrykingcha@gmail.com>",
   "license": "MIT",
