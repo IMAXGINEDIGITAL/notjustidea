@@ -8,7 +8,8 @@
     "build:dev": "npm run build:base -- --dev -p dist/*.js",
     "build:dist": "npm run build:base -- -p dist/*.js",
     "dev": "npm run bundle:dev -- --watch & gazeer -p dist/*.js -c 'npm run build:base -- --dev -p \"$filepath\"'",
-    "dist": "npm run bundle:dist && npm run build:dist"
+    "dist": "npm run bundle:dist && npm run build:dist",
+    "serve": "serve ./ -p 8998"
   },
   "author": "Terry King <terrykingcha@gmail.com>",
   "license": "MIT",
@@ -39,11 +40,7 @@
     "postcss": "^5.0.10",
     "postcss-cssnext": "^2.7.0",
     "postcss-selector-parser": "^1.1.2",
-    "rollup": "^0.31.2",
-    "rollup-plugin-babel": "^2.5.1",
-    "rollup-plugin-commonjs": "^3.0.0",
-    "rollup-plugin-node-resolve": "^1.7.0",
-    "rollup-watch": "^2.4.0",
+    "serve": "^1.4.0",
     "source-map": "^0.5.3",
     "style-loader": "^0.13.1",
     "vue-hot-reload-api": "^2.0.5",
