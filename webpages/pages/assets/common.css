@@ -1,0 +1,8 @@
+body {
+    background-color: #000;
+    -webkit-font-smoothing: subpixel-antialiased !important;
+}
+
+body * {
+    font-family: "Microsoft YaHei", "微软雅黑", "Hiragino Sans GB", "STHeiti", "华文黑体", sans-serif;
+}

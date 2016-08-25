@@ -62,7 +62,7 @@ filepaths.forEach(filepath => {
 
     let bundle;
     if (isDevelop) {
-        bundle = Promise.resolve(`<script src="../dist/${name}.js"></script>`);
+        bundle = Promise.resolve(`<script src="dist/${name}.js"></script>`);
     } else {
         bundle = fs.readFileAsync(filepath, 'utf-8')
                         .then(filecontent => {

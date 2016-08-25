@@ -1,13 +1,3 @@
 <template>
-    <div>Hello <name></name></div>
+    <div>Hello World</div>
 </template>
-
-<script>
-import name from '../component/name.vue';
-
-export default {
-    components: {
-        name: name
-    }
-}
-</script>

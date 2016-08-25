@@ -3,23 +3,22 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<script src="lib/vue.js"></script>
+<link href="assets/reset.css" rel="stylesheet" />
+<link href="assets/common.css" rel="stylesheet" />
+<script src="lib/es6promise.min.js"></script>
+<script src="lib/vue.min.js"></script>
 </head>
 <body>
-<div id="app"></div>
+<div id="app">
+    <app></app>
+</div>
 {{bundle}}
 <script>
 (function(Vue, app) {
-    var vue = new Vue({
+    new Vue({
         el: '#app',
-        render: function() {
-            with(this) {
-                return _h('app')
-            }
-        },
-        staticRenderFns: [],
         components: {
-        app: app
+            app: app
         }
     });
 })(window.Vue, window.VUE_APP);

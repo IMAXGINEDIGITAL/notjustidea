@@ -1,5 +1,6 @@
 const path = require('path');
 const globule = require('globule');
+const cssnext = require('postcss-cssnext')
 const filepaths = globule.find('src/view/*.vue');
 const entry = {};
 
@@ -14,7 +15,7 @@ module.exports = {
   entry: entry,
   // where to place the compiled bundle
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'pages', 'dist'),
     filename: '[name].js',
     library: 'VUE_APP',
     libraryTarget: 'var'
@@ -26,17 +27,18 @@ module.exports = {
       {
         test: /\.vue$/, // a regex for matching all files that end in `.vue`
         loader: 'vue'   // loader to use for matched files
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel?presets[]=es2015&plugins[]=transform-runtime'
       }
-    ]
-  },
-  resolveLoader: {
-    modulesDirectories: [
-      path.resolve(__dirname, 'lib'),
-      'node_modules'
     ]
   },
   vue: {
     autoprefixer: false,
-    postcss: [require('postcss-cssnext')()]
+    postcss: [cssnext()],
+    loader: {
+      css: 'postcss'
+    }
   }
 }
