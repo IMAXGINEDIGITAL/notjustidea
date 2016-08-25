@@ -1,7 +1,15 @@
 <template>
     <div class="form">
-        <field :width="formWidth" placeholder="邮箱地址" type="text" :value="email" :err-msg="emailErrorMsg"></field>
-        <field :width="formWidth" placeholder="密码" type="password" :value="password" :err-msg="pswErrorMsg"></field>
+        <field :width="formWidth" 
+            placeholder="邮箱地址" 
+            type="text" 
+            :value.sync="email" 
+            :err-msg="emailErrorMsg"></field>
+        <field :width="formWidth" 
+            placeholder="密码" 
+            type="password" 
+            :value.sync="password" 
+            :err-msg="pswErrorMsg"></field>
         <div class="extra" :style="{width: formWidth + 'px'}">
             <div>
                 <input class="checkbox" type="checkbox" v-model="isKeepSignin" />
@@ -87,7 +95,6 @@ export default {
 
     methods: {
         signin() {
-            console.log(this.email, this.password)
             signin(this.email, this.password, this.isKeepSignin)
                 .then((ret) => {
                     location.href = 'index.html';

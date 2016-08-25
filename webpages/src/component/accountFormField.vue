@@ -1,6 +1,10 @@
 <template>
     <div :style="{width: width + 'px'}" class="field" :class="{error: !!errMsg}">
-        <input @focus="reset" class="inputtext" :type="type" :placeholder="placeholder" v-model="value" />
+        <input @focus="reset" 
+            class="inputtext" 
+            :type="type" 
+            :placeholder="placeholder" 
+            v-model="value" />
         <div class="errMsg">← {{errMsg}}</div>
     </div>
 </template>
@@ -55,15 +59,6 @@
 <script>
 export default {
     props: ['width', 'type', 'value', 'placeholder', 'errMsg'],
-
-    data() {
-        // return {
-        //     type: '',
-        //     value: '',
-        //     errMsg: '',
-        //     placeholder: ''
-        // }
-    },
 
     methods: {
         reset() {

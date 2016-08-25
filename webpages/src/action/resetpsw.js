@@ -1,25 +1,25 @@
 import {
-    validateEmail,
-    validatePassword
+    validatePassword,
+    validateConfirmPassword
 } from './accountValidate';
 
 const {Promise} = window;
 
-function requestSignin(email, password, isKeepSignin) {
+function requestResetpsw(password) {
     return Promise.resolve();
 }
 
-export function signin(email = '', password = '', isKeepSignin = false) {
+export function resetpsw(password = '', confirmPassword = '') {
     return new Promise((resolve, reject) => {
         const errs = {
-            emailError: validateEmail(email),
-            pswError: validatePassword(password)
+            pswError: validatePassword(password),
+            confirmPswError: validateConfirmPassword(password, confirmPassword)
         };
 
         if (Object.keys(errs).length > 0) {
             reject(errs);
         } else {
-            requestSignin(email, password, isKeepSignin)
+            requestResetpsw(password)
                 .then(resolve)
                 .catch(_errs => {
                     for (const key in _errs) {

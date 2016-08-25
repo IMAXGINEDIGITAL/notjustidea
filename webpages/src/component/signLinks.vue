@@ -1,6 +1,6 @@
 <template>
     <div class="links">
-        <a href="signup.html">注册</a>
+        <a :href="url">{{text}}</a>
         <a href="index.html">随便逛逛</a>
     </div>
 </template>
@@ -18,3 +18,9 @@
     }
 }
 </style>
+
+<script>
+export default {
+    props: ['url', 'text']
+}
+</script>

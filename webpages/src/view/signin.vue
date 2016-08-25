@@ -2,7 +2,7 @@
     <layout>
         <title></title>
         <aform></aform>
-        <links class="links"></links>
+        <links class="links" text="注册" url="signup.html"></links>
     </layout>
 </template>
 

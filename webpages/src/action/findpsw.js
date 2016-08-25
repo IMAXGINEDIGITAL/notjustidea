@@ -5,21 +5,20 @@ import {
 
 const {Promise} = window;
 
-function requestSignin(email, password, isKeepSignin) {
+function requestFindpsw(email) {
     return Promise.resolve();
 }
 
-export function signin(email = '', password = '', isKeepSignin = false) {
+export function findpsw(email = '') {
     return new Promise((resolve, reject) => {
         const errs = {
-            emailError: validateEmail(email),
-            pswError: validatePassword(password)
+            emailError: validateEmail(email)
         };
 
         if (Object.keys(errs).length > 0) {
             reject(errs);
         } else {
-            requestSignin(email, password, isKeepSignin)
+            requestFindpsw(email)
                 .then(resolve)
                 .catch(_errs => {
                     for (const key in _errs) {
