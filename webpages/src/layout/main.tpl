@@ -6,6 +6,7 @@
 <link href="assets/reset.css" rel="stylesheet" />
 <link href="assets/common.css" rel="stylesheet" />
 <script src="lib/es6promise.min.js"></script>
+<script src="lib/fetch.min.js"></script>
 <script src="lib/vue.min.js"></script>
 </head>
 <body>
