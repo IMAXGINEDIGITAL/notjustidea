@@ -30,7 +30,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel?presets[]=es2015&plugins[]=transform-runtime'
+        loader: 'babel'
       }
     ]
   },

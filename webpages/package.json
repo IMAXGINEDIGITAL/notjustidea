@@ -53,6 +53,8 @@
     "yargs": "^4.7.1"
   },
   "dependencies": {
+    "cookie-handler": "^1.0.1",
+    "crypto-js": "^3.1.6",
     "es6-promise": "^3.2.1",
     "lodash": "^4.13.1",
     "whatwg-fetch": "^1.0.0"

@@ -1,4 +1,4 @@
-function validateEmail(email) {
+function validateEmail(email = '') {
     let error;
     if (email === '') {
         error = '邮箱地址不能为空';
@@ -8,7 +8,7 @@ function validateEmail(email) {
     return error;
 }
 
-function validatePassword(password) {
+function validatePassword(password = '') {
     let error;
     if (password === '') {
         error = '密码不能为空';
@@ -20,7 +20,7 @@ function validatePassword(password) {
     return error;
 }
 
-function validateConfirmPassword(password, confirmPassoword) {
+function validateConfirmPassword(password = '', confirmPassword = '') {
     let error;
     if (password !== '' && confirmPassword === '') {
         error = '请再次输入密码';
@@ -31,8 +31,19 @@ function validateConfirmPassword(password, confirmPassoword) {
     return error;
 }
 
+function validateCaptcha(captcha = '') {
+    let error;
+    if (captcha === '') {
+        error = '验证码不能为空';
+    } else if (!captcha.match(/^[a-z0-9]{4}$/i)){
+        error = '验证码格式不正确';
+    }
+    return error;
+}
+
 export {
     validateEmail,
     validatePassword,
-    validateConfirmPassword
+    validateConfirmPassword,
+    validateCaptcha
 };

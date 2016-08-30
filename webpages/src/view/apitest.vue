@@ -3,9 +3,9 @@
     <form>
         <h2>定义</h2>
         <div>
-            <label>API名称</label><input type="text" v-model="api" />
-            <input type="radio" value="GET" id="methodGet" name="method" v-model="method" /><label for="methodGet">GET</label>
-            <input type="radio" value="POST" id="methodPost" name="method" v-model="method" /><label for="methodPost">POST</label>
+            <input style="width: 400px;" type="text" placeholder="输入API名称，例如/common/checkcaptcha" v-model="api" />
+<!--             <input type="radio" value="GET" id="methodGet" name="method" v-model="method" /><label for="methodGet">GET</label>
+            <input type="radio" value="POST" id="methodPost" name="method" v-model="method" /><label for="methodPost">POST</label> -->
         </div>
         <h3>qs参数</h3>
         <div v-for="item in qslist" track-by="$index">
@@ -18,23 +18,28 @@
             <input v-model="item.name" type="text" placeholder="参数名" />
             <input v-model="item.value" type="text" placeholder="参数值" />
         </div>
-        <div><a class="btn">增加data参数</a></div>
+        <div><a class="btn" @click="adddata">增加data参数</a></div>
     </form>
     <form>
         <h2>验证码</h2>
         <div>
+            <input v-model="captcha" placeholder="请输入验证码" type="text" />
             <img :src="captchaSrc" />
             <a class="btn" @click="refreshCaptcha">刷新</a>
-            <a class="btn" @click="checkCaptcha">验证</a>
+            <!-- <a class="btn" @click="checkCaptcha">验证</a> -->
         </div>
-        <div>
+<!--         <div>
             <label>验证码id: <b>{{captchaId}}</b></label>
         </div>
         <div>
-            <label>验证码值</label><input v-model="captcha" type="text" />
+            <label>验证码值</label>
+        </div> -->
+        <div>
+            <a class="submit" @click="request('GET')">GET请求</a>
+            <a class="submit" @click="request('POST')">POST请求</a>
         </div>
-    </form>
-    <a class="submit" @click="request">发送请求</a>
+    </form> 
+
     <pre>{{result}}</pre>
 </template>
 
@@ -74,7 +79,14 @@ export default {
             });
         },
 
-        request() {
+        adddata() {
+            this.datalist.push({
+                name: '',
+                text: ''
+            });
+        },
+
+        request(method) {
             if (this.api === '') {
                 return;
             }
@@ -98,13 +110,13 @@ export default {
                             }, data);
 
             const options = {
-                method: this.method,
+                method: method,
                 mode: 'cors',
                 credentials: 'include'
             };
 
-            if (this.method === 'POST') {
-                options.body = data;
+            if (method === 'POST') {
+                options.body = JSON.stringify(data);
             }
 
             fetch(`${serverHost}${this.api}?__${Date.now()}__&${qs.join('&')}`, options)
@@ -188,6 +200,7 @@ form > div {
 }
 
 input {
+    width: 200px;
     border: 1px solid #FFF;
     padding: 5px;
     margin: 5px;
@@ -213,7 +226,7 @@ label {
 }
 
 .submit {
-    width: 80%;
+    width: 40%;
     display: block;
     box-sizing: border-box;
     margin: 10px auto;

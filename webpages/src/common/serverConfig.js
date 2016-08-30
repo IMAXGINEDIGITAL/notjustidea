@@ -1,0 +1,1 @@
+export const host = 'http://www.notjustidea.com/apis';
