@@ -1,1 +1,1 @@
-export const host = 'http://www.notjustidea.com/apis';
+export const host = process.env.host;

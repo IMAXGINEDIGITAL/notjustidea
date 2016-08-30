@@ -9,7 +9,8 @@
     "build:dist": "npm run build:base -- -p \"pages/dist/*.js\"",
     "dev": "npm run bundle:dev -- --watch & gazeer -p \"pages/dist/*.js\" -c 'npm run build:base -- --dev -p \"$filepath\"'",
     "dist": "npm run bundle:dist && npm run build:dist",
-    "serve": "serve ./ -p 8998"
+    "serve": "serve ./pages -p 8998",
+    "publish": "npm run dist && scp -r pages/* root@120.25.221.4:/home/imaxgine/sites/notjustidea/webpages/"
   },
   "author": "Terry King <terrykingcha@gmail.com>",
   "license": "MIT",

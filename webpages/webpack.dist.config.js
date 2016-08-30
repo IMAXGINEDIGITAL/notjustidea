@@ -5,9 +5,10 @@ config.plugins = (config.plugins || []).concat([
   // this allows uglify to strip all warnings
   // from Vue.js source code.
   new webpack.DefinePlugin({
-    'process.env': {
-      NODE_ENV: '"production"'
-    }
+    'process.env': JSON.stringify({
+      NODE_ENV: 'production',
+      host: ''
+    })
   }),
   // This minifies not only JavaScript, but also
   // the templates (with html-minifier) and CSS (with cssnano)!
