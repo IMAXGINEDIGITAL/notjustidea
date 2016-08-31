@@ -35,7 +35,7 @@
 </template>
 
 <script>
-const serverHost = 'http://www.notjustidea.com/apis'
+import {host} from '../common/serverConfig';
 const {JSON, Promise} = window;
 
 export default {
@@ -112,7 +112,7 @@ export default {
                         `captchaId=${this.captchaId}`);
             }
 
-            fetch(`${serverHost}${this.api}?__${Date.now()}__&${qs.join('&')}`, options)
+            fetch(`${host}${this.api}?__${Date.now()}__&${qs.join('&')}`, options)
             .then(res => {
                 if (res.ok) {
                     return res.json();
@@ -131,7 +131,7 @@ export default {
         },
 
         checkCaptcha() {
-            const api = `${serverHost}/common/checkcaptcha`;
+            const api = `${host}/common/checkcaptcha`;
             fetch(`${api}?captchaId=${this.captchaId}&captcha=${this.captcha}`, {
                 credentials: 'include'
             }).then(res => {
@@ -152,7 +152,7 @@ export default {
         },
 
         refreshCaptcha() {
-            fetch(`${serverHost}/common/captcha.png`, {
+            fetch(`${host}/common/captcha.png`, {
                 credentials: 'include'
             }).then(res => {
                 this.captchaId = res.headers.get('id');
