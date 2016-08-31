@@ -87,11 +87,6 @@ export default {
                             return `${name}=${encodeURIComponent(value)}`;
                             });
 
-            if (this.captcha) {
-                qs.push(`captcha=${this.captcha}`,
-                        `captchaId=${this.captchaId}`);
-            } 
-
             const data = {};
 
             this.datalist.filter(({name, value}) => name && value)
@@ -107,7 +102,14 @@ export default {
             };
 
             if (method === 'POST') {
+                if (this.captcha) {
+                    data['captcha'] = this.captcha;
+                    data['captchaId'] = this.captchaId;
+                }
                 options.body = JSON.stringify(data);
+            } else if (method === 'GET' && this.captcha){
+                qs.push(`captcha=${this.captcha}`,
+                        `captchaId=${this.captchaId}`);
             }
 
             fetch(`${serverHost}${this.api}?__${Date.now()}__&${qs.join('&')}`, options)
