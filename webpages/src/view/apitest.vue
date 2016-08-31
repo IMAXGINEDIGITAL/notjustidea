@@ -4,8 +4,6 @@
         <h2>定义</h2>
         <div>
             <input style="width: 400px;" type="text" placeholder="输入API名称，例如/common/checkcaptcha" v-model="api" />
-<!--             <input type="radio" value="GET" id="methodGet" name="method" v-model="method" /><label for="methodGet">GET</label>
-            <input type="radio" value="POST" id="methodPost" name="method" v-model="method" /><label for="methodPost">POST</label> -->
         </div>
         <h3>qs参数</h3>
         <div v-for="item in qslist" track-by="$index">
@@ -26,14 +24,7 @@
             <input v-model="captcha" placeholder="请输入验证码" type="text" />
             <img :src="captchaSrc" />
             <a class="btn" @click="refreshCaptcha">刷新</a>
-            <!-- <a class="btn" @click="checkCaptcha">验证</a> -->
         </div>
-<!--         <div>
-            <label>验证码id: <b>{{captchaId}}</b></label>
-        </div>
-        <div>
-            <label>验证码值</label>
-        </div> -->
         <div>
             <a class="submit" @click="request('GET')">GET请求</a>
             <a class="submit" @click="request('POST')">POST请求</a>
@@ -135,7 +126,6 @@ export default {
             }).catch(err => {
                 this.result = JSON.stringify(err, null, '  ');
             });
-            // console.log(this.api, this.method, this.qslist, this.datalist)
         },
 
         checkCaptcha() {

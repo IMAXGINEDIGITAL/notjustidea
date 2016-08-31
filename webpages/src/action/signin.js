@@ -1,32 +1,38 @@
+import request from './request';
 import {
     validateEmail,
-    validatePassword
-} from './accountValidate';
+    validatePassword,
+    validateCaptcha
+} from './validate';
 
-const {Promise} = window;
+const api = '/accounts/signin';
+const v = '1.0';
+const method = 'POST';
 
-function requestSignin(email, password, isKeepSignin) {
-    return Promise.resolve();
-}
+export function signin(email, password, captcha, captchaId, remember) {
+    const emailError = validateEmail(email);
+    const pswError = validatePassword(password);
+    const captchaError = validateCaptcha(captcha);
 
-export function signin(email = '', password = '', isKeepSignin = false) {
-    return new Promise((resolve, reject) => {
-        const errs = {
-            emailError: validateEmail(email),
-            pswError: validatePassword(password)
-        };
+    const errs = {
+        emailError,
+        pswError,
+        captchaError
+    };
 
-        if (Object.keys(errs).length > 0) {
-            reject(errs);
-        } else {
-            requestSignin(email, password, isKeepSignin)
-                .then(resolve)
-                .catch(_errs => {
-                    for (const key in _errs) {
-                        errs.add(key, _errs(key));
-                    }
-                    reject(errs);
-                });
-        }
+    const data = new Map([
+        ['email', email],
+        ['password', password],
+        ['remember', remember],
+        ['captchaId', captchaId],
+        ['captcha', captcha]
+    ]);
+
+    return request({
+        api,
+        v,
+        method,
+        errs,
+        data
     });
 }

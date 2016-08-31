@@ -1,6 +1,7 @@
 import cookies from 'cookie-handler';
 import sha1 from 'crypto-js/sha1';
 import {host} from './serverConfig';
+import errorCode from './errorCode';
 
 const {JSON, Promise, fetch} = window;
 
@@ -47,15 +48,20 @@ export default function (api, v, method, qs, data) {
             if (res.ok) {
                 return res.json();
             } else {
-                return Promise.reject([
-                    'UNKNOW_ERROR'
-                ]);
+                return Promise.resolve({
+                    code: -1,
+                    reason: ['SERVER_ERROR']
+                });
             }
         }).then(result => {
             if (Number(result.code) === 0) {
                 return Promise.resolve(result.data);
             } else {
-                return Promise.reject(result.reason);
+                return Promise.reject(result.reason)
             }
+        }).catch(reason => {
+            return Promise.reject({
+                globalError: reason.map(name => errorCode.get(name)).join('\n')
+            });
         });
 }

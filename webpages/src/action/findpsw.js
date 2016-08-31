@@ -1,31 +1,33 @@
+import request from './request';
 import {
     validateEmail,
-    validatePassword
-} from './accountValidate';
+    validateCaptcha
+} from './validate';
 
-const {Promise} = window;
+const api = '/accounts/retrieve';
+const v = '1.0';
+const method = 'GET';
 
-function requestFindpsw(email) {
-    return Promise.resolve();
-}
+export function findpsw(email, captcha, captchaId) {
+    const emailError = validateEmail(email);
+    const captchaError = validateCaptcha(captcha);
 
-export function findpsw(email = '') {
-    return new Promise((resolve, reject) => {
-        const errs = {
-            emailError: validateEmail(email)
-        };
+    const errs = {
+        emailError,
+        captchaError
+    };
 
-        if (Object.keys(errs).length > 0) {
-            reject(errs);
-        } else {
-            requestFindpsw(email)
-                .then(resolve)
-                .catch(_errs => {
-                    for (const key in _errs) {
-                        errs.add(key, _errs(key));
-                    }
-                    reject(errs);
-                });
-        }
+   const qs = new Map([
+        ['email', email],
+        ['captchaId', captchaId],
+        ['captcha', captcha]
+    ]);
+
+    return request({
+        api,
+        v,
+        method,
+        errs,
+        qs
     });
 }

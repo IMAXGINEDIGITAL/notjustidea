@@ -4,27 +4,27 @@
             placeholder="用于登录的邮箱 username@mailbox.com" 
             type="text" 
             :value.sync="email" 
-            :err-msg="emailErrorMsg"></field>
+            :err-msg.sync="emailErrorMsg"></field>
 
         <field 
             :width="formWidth" 
             placeholder="登录密码至少8位，需含英文及数字" 
             type="password"
             :value.sync="password" 
-            :err-msg="pswErrorMsg"></field>
+            :err-msg.sync="pswErrorMsg"></field>
 
         <field 
             :width="formWidth" 
             placeholder="请再次确认密码" 
             type="password"
             :value.sync="confirmPassword" 
-            :err-msg="confirmPswErrorMsg"></field>
+            :err-msg.sync="confirmPswErrorMsg"></field>
 
         <captcha 
             :width="formWidth" 
             :captcha.sync="captcha"
             :captcha-id.sync="captchaId"
-            :captcha-err-msg="captchaErrorMsg"></captcha>
+            :captcha-err-msg.sync="captchaErrorMsg"></captcha>
 
         <div class="extra" :style="{width: formWidth + 'px'}">
             <input class="checkbox" type="checkbox" v-model="isAgreePolicy" />
@@ -33,10 +33,13 @@
 
         <submit v-if="isAgreePolicy" v-ref:submit :width="formWidth" class="btn" text="注册"></submit>
     </div>
+
+    <tip v-if="globalErrorMsg" :text.sync="globalErrorMsg"></tip>
 </template>
 
 <script>
 import {signup} from '../action/signup';
+import globalTip from './globalTip.vue';
 import captchaField from './captchaField.vue';
 import accountFormField from './accountFormField.vue';
 import accountFormButton from './accountFormButton.vue';
@@ -54,14 +57,16 @@ export default {
             confirmPswErrorMsg: '',
             captcha: '',
             captchaId: '',
-            captchaErrorMsg: ''
+            captchaErrorMsg: '',
+            globalErrorMsg: ''
         }
     },
 
     components: {
         field: accountFormField,
         submit: accountFormButton,
-        captcha: captchaField
+        captcha: captchaField,
+        tip: globalTip
     },
 
     ready() {
@@ -85,24 +90,10 @@ export default {
                     return Promise.reject(errs);
                 }
 
-                if (errs.emailError) {
-                    this.emailErrorMsg = errs.emailError;
-                }
-
-                if (errs.pswError) {
-                    this.pswErrorMsg = errs.pswError;
-                }
-
-                if (errs.confirmPswError) {
-                    this.confirmPswErrorMsg = errs.confirmPswError;
-                }
-
-                if (errs.captchaError) {
-                    this.captchaErrorMsg = errs.captchaError;
-                }
-
-                if (errs.globalError) {
-                    console.log(errs.globalError);
+                for (const key in errs) {
+                    if (errs[key]) {
+                        this[`${key}Msg`] = errs[key];
+                    }
                 }
             });
         },

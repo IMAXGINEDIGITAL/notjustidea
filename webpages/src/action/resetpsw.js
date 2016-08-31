@@ -1,32 +1,41 @@
+import request from './request';
 import {
+    validateEmail,
     validatePassword,
-    validateConfirmPassword
-} from './accountValidate';
+    validateConfirmPassword,
+    validateCaptcha
+} from './validate';
 
-const {Promise} = window;
+const api = '/accounts/resetpsw';
+const v = '1.0';
+const method = 'POST';
 
-function requestResetpsw(password) {
-    return Promise.resolve();
-}
+export function resetpsw(email, code, password, confirmPassword, captcha, captchaId) {
+    const emailError =validateEmail(email);
+    const pswError = validatePassword(password);
+    const confirmPswError = validateConfirmPassword(password, confirmPassword);
+    const captchaError = validateCaptcha(captcha);
 
-export function resetpsw(password = '', confirmPassword = '') {
-    return new Promise((resolve, reject) => {
-        const errs = {
-            pswError: validatePassword(password),
-            confirmPswError: validateConfirmPassword(password, confirmPassword)
-        };
+    const errs = {
+        emailError,
+        pswError,
+        confirmPswError,
+        captchaError
+    };
 
-        if (Object.keys(errs).length > 0) {
-            reject(errs);
-        } else {
-            requestResetpsw(password)
-                .then(resolve)
-                .catch(_errs => {
-                    for (const key in _errs) {
-                        errs.add(key, _errs(key));
-                    }
-                    reject(errs);
-                });
-        }
+   const data = new Map([
+        ['email', email],
+        ['code', code],
+        ['password', password],
+        ['captchaId', captchaId],
+        ['captcha', captcha]
+    ]);
+
+    return request({
+        api,
+        v,
+        method,
+        errs,
+        data
     });
 }

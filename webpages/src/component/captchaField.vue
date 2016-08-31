@@ -8,7 +8,7 @@
                 placeholder="点击验证码刷新" 
                 type="text"
                 :value.sync="captcha" 
-                :err-msg="captchaErrMsg"></field>
+                :err-msg.sync="captchaErrMsg"></field>
         </div>
     </div>
 </template>

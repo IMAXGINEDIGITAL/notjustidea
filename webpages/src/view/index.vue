@@ -43,6 +43,10 @@ export default {
                 {
                     url: 'signup.html',
                     text: '注册'
+                },
+                {
+                    url: 'findpsw.html',
+                    text: '找回密码'
                 }
             ]
         }

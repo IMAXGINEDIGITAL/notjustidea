@@ -1,10 +1,13 @@
 <template>
-    <div v-if="email">
+    <div v-if="validated">
         <h1>邮箱验证成功</h1>
         <p>欢迎加入中国最新锐的创意资源库。</p>
         <p>登录后即可上传自己的创意作品、委托查找供应商等。</p>
+        <signinform class="form" :email="email"></signinform>
     </div>
-    <signinform class="form" :email="email"></signinform>
+    <div v-else>
+        <p>{{{message}}}</p>
+    </div>
 </template>
 
 <style scoped>
@@ -29,16 +32,16 @@ p {
 </style>
 
 <script>
-import emailBoxMap from '../common/emailboxmap';
+import {activate} from '../action/activate';
 import signinForm from './signinForm.vue';
 
 export default {
-    props: ['email'],
+    props: ['email', 'code'],
 
     data() {
         return {
-            email: '',
-            emailbox: ''
+            validated: false,
+            message: '正在验证邮箱...'
         }
     },
 
@@ -46,12 +49,28 @@ export default {
         signinform: signinForm
     },
 
-    created() {
-        if (this.email) {
-            const posfix = this.email.match(/\@([^@]+)$/);
-            if (posfix && emailBoxMap[posfix[1]]) {
-                this.emailbox = emailBoxMap[posfix[1]];
-            }
+    ready() {
+        if (this.email && this.code) {
+            this.submit()
+        } else {
+            this.message = '无法验证邮箱';
+        }
+    },
+
+    methods: {
+        submit() {
+            activate(this.email, this.code)
+                .then(() => {
+                    this.validated = true;
+                }).catch((errs) => {
+                    if (errs instanceof Error) {
+                        return Promise.reject(errs);
+                    }
+
+                    this.message = Object.values(errs)
+                                    .filter(s => s)
+                                    .join('<br />');
+                });
         }
     }
 }

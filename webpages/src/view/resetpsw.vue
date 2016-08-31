@@ -1,7 +1,7 @@
 <template>
     <layout>
         <title></title>
-        <aform :email="email" :active-code="activeCode"></aform>
+        <aform :email="email" :code="code"></aform>
     </layout>
 </template>
 
@@ -18,7 +18,7 @@ export default {
     data() {
         return {
             email: '',
-            activeCode: '',
+            code: '',
         }
     },
 
@@ -31,7 +31,7 @@ export default {
     created() {
         const query = parseQuery(global.location.search.replace(/^\?/, ''));
         this.email = query.email;
-        this.activeCode = query.activeCode;
+        this.code = query.code;
     }
 }
 </script>
