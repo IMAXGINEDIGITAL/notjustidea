@@ -1,0 +1,147 @@
+<html lang="zh-CN">
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+</head>
+<body>
+    <div id="result">see you later</div>
+    <form id="my" action="" method="post">
+        <p><span>email</span><input type="text" name="email" /></p>
+        <p><span>password</span><input type="text" name="password" /></p>
+        <p><span>captchaId</span><input type="text" name="captchaId" /></p>
+        <p><span>captcha</span><input type="text" name="captcha" /></p>
+        <p><span>remember</span><input type="text" name="remember" /></p>
+    </form>
+<button id="signup">signup</button>
+<button id="signin">signin</button>
+<button id="checktoken">checktoken</button>
+<button id="activate">activate</button>
+<button id="exists">exists</button>
+<button id="retrieve">retrieve</button>
+<button id="resetpsw">resetpsw</button>
+<button id="delete">delete</button>
+</body>
+<script	src="js/jquery-1.11.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function(){
+    $("#signup").click(function(){
+        var cont = $("input").serialize();
+        $.ajax({  
+            url:'../accounts/signup',
+            type:'POST',
+            //async: false,
+            dataType:'json',
+            data:cont,
+            success:function(data){
+                var str = data.email + data.password;
+                $("#result").html(str);
+            }
+        });
+    });  
+});
+
+$(function(){
+    $("#signin").click(function(){
+        var cont = $("input").serialize();
+        //var data = {"remember":false}
+        $.ajax({  
+            url:'../accounts/signin',
+            type:'POST',
+            //async: false,
+            dataType:'json',
+            data:cont,
+        });
+    });  
+});
+
+$(function(){
+    $("#checktoken").click(function(){
+        //var cont = $("input").serialize();
+        var data = {"token":"19f56994678511e688f5000c299419371"}
+        $.ajax({  
+            url:'../accounts/checktoken',
+            type:'POST',
+            //async: false,
+            dataType:'json',
+            data:data,
+        });
+    });  
+});
+
+$(function(){
+    $("#activate").click(function(){
+        //var cont = $("input").serialize();
+        var data = {"email":"jiangrains@126.com", "code":"asafaf"}
+        $.ajax({  
+            url:'../accounts/activate',
+            type:'GET',
+            //async: false,
+            dataType:'json',
+            data:data,
+        });
+    });  
+});
+
+$(function(){
+    $("#exists").click(function(){
+        //var cont = $("input").serialize();
+        var data = {"email":"sadaasds1"}
+        $.ajax({  
+            url:'../accounts/exists',
+            type:'GET',
+            //async: false,
+            dataType:'json',
+            data:data,
+        });
+    });  
+});
+
+$(function(){
+    $("#retrieve").click(function(){
+        //var cont = $("input").serialize();
+        var data = {
+            "email":"jiangrains@126.com", 
+            "captchaId":"asda",
+            "captcha":"asdad"}
+        $.ajax({  
+            url:'../accounts/retrieve',
+            type:'GET',
+            //async: false,
+            dataType:'json',
+            data:data,
+        });
+    });  
+});
+
+$(function(){
+    $("#resetpsw").click(function(){
+        //var cont = $("input").serialize();
+        var data = {
+            "email":"jiangrains@126.com", 
+            "code":"LGKyOQA1IYqkN9cSMiZrja605tgbUw83",
+            "password":"1234567890"}
+        $.ajax({  
+            url:'../accounts/resetpsw',
+            type:'GET',
+            //async: false,
+            dataType:'json',
+            data:data,
+        });
+    });  
+});
+
+$(function(){
+    $("#delete").click(function(){
+        //var cont = $("input").serialize();
+        var data = {
+            "email":"jiangrains@126.com"}
+        $.ajax({  
+            url:'../accounts/delete',
+            type:'POST',
+            //async: false,
+            dataType:'json',
+            data:data,
+        });
+    });  
+});
+</script>
+</html>
