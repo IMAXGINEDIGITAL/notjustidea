@@ -63,6 +63,10 @@ class Account(models.Model):
         self.save()
         return self.token
 
+    def exit(self):
+        self.token = ""
+        self.save()
+
     def activate(self):
         self.status = self.ACCOUNT_ACTIVE
         self.code = ""
@@ -73,10 +77,13 @@ class Account(models.Model):
 
 
     def retrieve(self):
-        self.code = get_random_string(32)
-        self.code_expire_date = timezone.now() + datetime.timedelta(days = self.CODE_EXPIRE_DAYS)
-        self.save()
-        return self.code
+        if self.code != "" and self.code_expire_date > timezone.now():
+            return self.code
+        else:
+            self.code = get_random_string(32)
+            self.code_expire_date = timezone.now() + datetime.timedelta(days = self.CODE_EXPIRE_DAYS)
+            self.save()
+            return self.code
 
 
     def resetpsw(self, password):
