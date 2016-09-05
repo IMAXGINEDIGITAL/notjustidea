@@ -45,11 +45,13 @@ INSTALLED_APPS = [
     'users',
     'accounts',
     'captcha',
+    'corsheaders',
 ]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -164,3 +166,6 @@ EMAIL_HOST_PASSWORD = '309Jiang'                  #我的邮箱密码
 EMAIL_SUBJECT_PREFIX = u'django'            #为邮件Subject-line前缀,默认是'[django]'
 EMAIL_USE_TLS = True                             #与SMTP服务器通信时，是否启动TLS链接(安全链接)。默认是false
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+#cors配置
+CORS_ORIGIN_ALLOW_ALL = True
