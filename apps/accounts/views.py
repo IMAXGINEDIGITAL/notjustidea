@@ -19,13 +19,13 @@ COOKIE_MAX_AGE = 1209600 #for 2 weeks
 @csrf_exempt
 def signup(request):
     if request.method == "POST":
-        json_data = json.loads(request.body)
         try:
+            json_data = json.loads(request.body) #if not json data ,it will raise a except.
             email = json_data["email"]
             password = json_data["password"]
             captchaId = json_data["captchaId"]
             captcha = json_data["captcha"]
-        except KeyError:
+        except :
             return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
 
         if email == "" or password == "" or captchaId == "" or captcha == "":
@@ -60,14 +60,14 @@ def signup(request):
 @csrf_exempt
 def signin(request):
     if request.method == "POST":
-        json_data = json.loads(request.body)
         try:
+            json_data = json.loads(request.body) #if not json data ,it will raise a except.
             email = json_data["email"]
             password = json_data["password"]
             remember = json_data["remember"]
             captchaId = json_data["captchaId"]
             captcha = json_data["captcha"]
-        except KeyError:
+        except :
             return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
 
         if email == "" or password == "" or captchaId == "" or captcha == "":
@@ -133,10 +133,10 @@ def exit(request):
 
 @csrf_exempt
 def checktoken(request):
-    json_data = json.loads(request.body)
     try:
+        json_data = json.loads(request.body) #if not json data ,it will raise a except.
         token = json_data["token"]
-    except KeyError:
+    except :
         return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
 
     if request.method == "POST" and token != "":
@@ -243,15 +243,14 @@ def retrieve(request):
 @csrf_exempt
 def resetpsw(request):
     if request.method == "POST":
-
-        json_data = json.loads(request.body)
         try:
+            json_data = json.loads(request.body)
             email = json_data["email"]
             password = json_data["password"]
             code = json_data["code"]
             captchaId = json_data["captchaId"]
             captcha = json_data["captcha"]
-        except KeyError:
+        except :
             return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
 
         if email == "" or code == "" or password == "" or captcha == "" or captchaId == "":
@@ -281,10 +280,10 @@ def resetpsw(request):
 @csrf_exempt
 def delete(request):
     if request.method == "POST":
-        json_data = json.loads(request.body)
         try:
+            json_data = json.loads(request.body) #if not json data ,it will raise a except.
             email = json_data["email"]
-        except KeyError:
+        except :
             return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
 
         try:
