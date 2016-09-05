@@ -12,7 +12,7 @@ from common.http_response_customer import HttpResponseCustomer
 from common.views import check_captcha_inna
 from common.errcode import *
 
-
+COOKIE_MAX_AGE = 1209600 #for 2 weeks
 
 
 # Create your views here.
@@ -91,48 +91,44 @@ def signin(request):
                 return HttpResponseCustomer(errCode = ACCOUNT_NOTACTIVATED_CODE, reason = [ACCOUNT_NOTACTIVATED], data = {"token":""})
             
             token = account.signin(remember)
+            response = HttpResponseCustomer(errCode = 0, reason = [], data = {"token":token})
+            cookie_age = (COOKIE_MAX_AGE if remember else None)
+            response.set_cookie("_nji_tk_", token, max_age = cookie_age)
+            return response
     else:
         return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {"token":""})
-    return HttpResponseCustomer(errCode = 0, reason = [], data = {"token":token})
 
 
 @csrf_exempt
 def exit(request):
-    if request.method == "POST":
-        json_data = json.loads(request.body)
+    if request.method == "GET":
+        email = request.GET.get("email", "")
+        token = request.GET.get("token", "")
+
+        if email == "" or token == "":
+            return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
+        
         try:
-            email = json_data["email"]
-            password = json_data["password"]
-            remember = json_data["remember"]
-            captchaId = json_data["captchaId"]
-            captcha = json_data["captcha"]
+            cookie_token = request.COOKIES["_nji_tk_"]
         except KeyError:
-            return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
-
-        if email == "" or password == "" or captchaId == "" or captcha == "":
-            return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
-
-        remember = (remember == "true") 
-
-        errCode, reason = check_captcha_inna(captchaId, captcha)
-        if errCode != 0:
-            return HttpResponseCustomer(errCode = errCode, reason = [reason], data = {})
+            cookie_token = ""
+        if token != cookie_token:
+                return HttpResponseCustomer(errCode = TOKEN_ILLEGAL_CODE, reason = [TOKEN_ILLEGAL], data = {})
 
         try:
             account = Account.objects.get(email = email)
         except :
-            return HttpResponseCustomer(errCode = ACCOUNT_INVALID_CODE, reason = [ACCOUNT_INVALID], data = {"token":""})
+            return HttpResponseCustomer(errCode = ACCOUNT_INVALID_CODE, reason = [ACCOUNT_INVALID], data = {})
         else:
-            if account.password != password:
-                return HttpResponseCustomer(errCode = PASSWORD_INVALID_CODE, reason = [PASSWORD_INVALID], data = {"token":""})
+            if account.token != token:
+                return HttpResponseCustomer(errCode = TOKEN_ILLEGAL_CODE, reason = [TOKEN_ILLEGAL], data = {})
 
-            if account.status == Account.ACCOUNT_NOTACTIVATED:
-                return HttpResponseCustomer(errCode = ACCOUNT_NOTACTIVATED_CODE, reason = [ACCOUNT_NOTACTIVATED], data = {"token":""})
-            
-            token = account.signin(remember)
+            account.exit()
+            response = HttpResponseCustomer(errCode = 0, reason = [], data = {})
+            response.delete_cookie("_nji_tk_", path = "/")
+            return response
     else:
-        return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {"token":""})
-    return HttpResponseCustomer(errCode = 0, reason = [], data = {"token":token})
+        return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
 
 
 @csrf_exempt
@@ -154,7 +150,7 @@ def checktoken(request):
     if account.checktoken() != 0:
         return HttpResponseCustomer(errCode = TOKEN_EXPIRE_CODE, reason = [TOKEN_EXPIRE], data = {"token":token})
     else:
-        return HttpResponseCustomer(errCode = 0, reason = [], data = {"token":token})   
+        return HttpResponseCustomer(errCode = 0, reason = [], data = {"token":token})
 
 
 
@@ -246,13 +242,24 @@ def retrieve(request):
 
 @csrf_exempt
 def resetpsw(request):
-    if request.method == "GET":
-        email = request.GET.get("email", "")
-        code = request.GET.get("code", "")
-        password = request.GET.get("password", "")
+    if request.method == "POST":
 
-        if email == "" or code == "" or password == "":
+        json_data = json.loads(request.body)
+        try:
+            email = json_data["email"]
+            password = json_data["password"]
+            code = json_data["code"]
+            captchaId = json_data["captchaId"]
+            captcha = json_data["captcha"]
+        except KeyError:
+            return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {})
+
+        if email == "" or code == "" or password == "" or captcha == "" or captchaId == "":
             return HttpResponseCustomer(errCode = FORMAT_ILLEGAL_CODE, reason = [FORMAT_ILLEGAL], data = {"email":email, "code":code, "password":password})
+
+        errCode, reason = check_captcha_inna(captchaId, captcha)
+        if errCode != 0:
+            return HttpResponseCustomer(errCode = errCode, reason = [reason], data = {})    
 
         try:
             account = Account.objects.get(email = email)
