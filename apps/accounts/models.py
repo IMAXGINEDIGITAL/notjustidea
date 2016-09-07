@@ -54,12 +54,8 @@ class Account(models.Model):
 
     #返回登陆会话的token
     def signin(self, remember):
-        if remember == True:
-            self.token = get_uuid()
-            self.token_expire_date = timezone.now() + datetime.timedelta(days = self.TOKEN_EXPIRE_DAYS)
-        else:
-            self.token = ""
-
+        self.token = get_uuid()
+        self.token_expire_date = timezone.now() + datetime.timedelta(days = self.TOKEN_EXPIRE_DAYS)
         self.save()
         return self.token
 
